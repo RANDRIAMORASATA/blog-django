@@ -1,0 +1,34 @@
+{% if datas.has_other_pages %}
+<nav aria-label="Page navigation example">
+    <ul class="pagination">
+        {% if datas.has_previous %}
+        <li class="page-item"><a class="page-link"
+                href="?page={{ datas.previous_page_number }}">Previous</a></li>
+        {% else %}
+        <li class="page-item" disabled><span
+                class="page-link">Previous</span></li>
+        {% endif %}
+        {% for page in datas.paginator.page_range %}
+        {% if page >= datas.number|add:'-2' and page <= datas.number|add:'2' %}
+        <li class="page-item">
+            <a href="?page={{ page }}"
+                class="page-link {% if datas.number == page %}active{% endif %}">
+                {{ page }}
+            </a>
+        </li>
+        {% endif %}
+        {% endfor %}
+
+        {% if datas.has_next %}
+        <li class="page-item"><a class="page-link"
+                href="?page={{ datas.next_page_number }}">Next</a></li>
+        {% else %}
+        <li class="page-item" disabled><span
+                class="page-link">Next</span></li>
+        {% endif %}
+    </ul>
+</nav>
+<p>
+    {{ datas.number }} of {{ datas.paginator.num_pages }}
+</p>
+{% endif %}

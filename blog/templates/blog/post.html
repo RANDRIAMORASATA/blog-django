@@ -1,0 +1,9 @@
+
+{% extends "blog/base.html" %}
+{% load static %}
+{% block content %}
+<h1>{{ title }}</h1>
+<div>{{ content | safe }}</div>
+<img src="{% static 'assets/images/1720205108988.jpeg'%}" alt="image"
+    class="img-fluid" width="300">
+{% endblock %}

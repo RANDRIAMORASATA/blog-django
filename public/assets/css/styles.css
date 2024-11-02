@@ -1,0 +1,10 @@
+
+    @media (max-width: 576px) {
+        .navbar-nav {
+            flex-direction: column;
+        }
+        .navbar-nav .nav-link {
+            padding: 0.5rem 1rem;
+            text-align: center;
+        }
+    }

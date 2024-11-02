@@ -1,0 +1,75 @@
+{% extends "blog/admin.html" %}
+{% load static %}
+{% block content %}
+{% include "blog/components/paginator.html" with datas=posts %}
+<div class="d-flex">
+    <a href="{% url 'dashboard_post_new'%}" class="btn btn-success my-2">Create
+        Post</a>
+
+</div>
+{% if messages %}
+<div class="alert alert-success">
+    {% for message in messages %}
+    {{ message }}
+    {% endfor %}
+</div>
+<script>
+        setTimeout(() => {
+            document.querySelector('.alert').style.display = 'none';
+        }, 3000);  
+    </script>
+{% endif %}
+{% if posts %}
+<table class="table table-striped table-bordered">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Titre</th>
+            <th scope="col">Image</th>
+            <th scope="col">Creation</th>
+            <th scope="col">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for post in posts %}
+        <tr>
+            <th scope="row">{{ post.id }}</th>
+            <td>{{ post.title }}</td>
+            {% if post.image %}
+            <td>
+                <img src="{{ post.image.url }}" alt="{{ post.title}}"
+                    width="100px" height="50px">
+            </td>
+            {% else %}
+            <td>
+                <img src="http://placehold.it/300x300"
+                    alt="{{ post.title}}" width="100px" height="50px">
+            </td>
+            {% endif %}
+
+            <td>{{ post.createdAt }}</td>
+            <td>
+                <div class="d-flex gap-2">
+                    <a href="{% url  'dashboard_post_view' post.slug %}"
+                        class="btn btn-success">View</a>
+                    <a href="{% url 'dashboard_post_edit' post.slug %}"
+                        class="btn btn-primary">Edit</a>
+                    <form action="{% url 'dashboard_post_delete' post.slug%}"
+                        method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="_method" value="DELETE">
+                        <button class="btn btn-danger">Delete</button>
+                    </form>
+                </div>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p>Iln y a pas de post disponible !</p>
+<p>Vous pouve creer via le bouton en haut !</p>
+{% endif %}
+
+{% include "blog/components/paginator.html" with datas=posts %}
+{% endblock %}

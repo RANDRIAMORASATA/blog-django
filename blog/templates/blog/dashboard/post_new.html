@@ -1,0 +1,115 @@
+{% extends "blog/admin.html" %}
+{% load static %}
+
+{% block content %}
+{% if post %}
+<h2>Modification post</h2>
+{% else %}
+<h2>Create post</h2>
+{% endif %}
+
+{% if messages %}
+{% for message in messages %}
+<div class="alert alert-success">
+    {{ message }}
+</div>
+{% endfor %}
+<script>
+    setTimeout(() => {
+        document.querySelector('.alert').style.display = 'none';
+    }, 3000);  
+</script>
+{% endif %}
+
+<form method="POST"
+    enctype="multipart/form-data">
+    {% csrf_token %}
+    {% if post %}
+    <input type="hidden" name="_method" value="PUT">
+    {% endif %}
+    <div class="form-group">
+        <label for="title">Titre :</label>
+        {{ form.title }}
+        {% if form.title.errors %}
+        {% for error in form.title.errors %}
+        <span class="text-danger">{{ error }}</span>
+        {% endfor %}
+        {% endif %}
+    </div>
+    <div class="form-group">
+        <label for="image">Image :</label>
+        {{ form.image }}
+        {% if form.image.errors %}
+        {% for error in form.image.errors %}
+        <span class="text-danger">{{ error }}</span>
+        {% endfor %}
+        {% endif %}
+    </div>
+    <div class="form-group">
+        <label for="message">Content :</label>
+        {{ form.content | safe}}
+        {% if form.content.errors %}
+        {% for error in form.content.errors %}
+        <span class="text-danger">{{ error }}</span>
+        {% endfor %}
+        {% endif %}
+    </div>
+    <div class="form-group">
+        <label for="tags">Tags :</label>
+        {{ form.tags }}
+        {% if form.tags.errors %}
+        {% for error in form.tags.errors %}
+        <span class="text-danger">{{ error }}</span>
+        {% endfor %}
+        {% endif %}
+    </div>
+    <div class="form-group">
+        <label for="category">Categorie :</label>
+        {{ form.category }}
+        {% if form.category.errors %}
+        {% for error in form.category.errors %}
+        <span class="text-danger">{{ error }}</span>
+        {% endfor %}
+        {% endif %}
+    </div>
+    <div class="form-group form-check form-switch py-1">
+        <label for="isPublished" class="form-check-label">Date de la publication
+            :</label>
+        {{ form.isPublished }}
+        {% if form.isPublished.errors %}
+        {% for error in form.isPublished.errors %}
+        <span class="text-danger">{{ error }}</span>
+        {% endfor %}
+        {% endif %}
+    </div>
+    <div>
+        {% if post %}
+        <button type="submit" class="btn btn-primary my-2">Update</button>
+        <a href="{% url "dashboard_post" %}"
+            class="btn btn-danger my-2">Cancel</a>
+        {% else %}
+        <button type="submit" class="btn btn-primary my-2">Creer</button>
+        <a href="{% url "dashboard_post" %}"
+            class="btn btn-danger my-2">Cancel</a>
+        {% endif %}
+    </div>
+
+</form>
+<script
+    src="https://cdn.ckeditor.com/ckeditor5/36.0.1/classic/ckeditor.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const editors = document.querySelectorAll('textarea')
+        editors.forEach(editor =>{
+            editor.removeAttribute('required')
+            ClassicEditor
+            .create(editor)
+            .catch(error => {
+                console.error(error);
+            });
+        })
+       
+    });
+</script>
+
+{% endblock %}
